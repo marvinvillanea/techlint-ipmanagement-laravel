@@ -122,3 +122,32 @@ DB_PASSWORD=
 ```bash
 php artisan key:generate
 ```
+
+## 6. Run Migrations
+
+This will create all tables in the database:
+```bash
+php artisan migrate
+``` 
+
+## 7. Seed Default Data
+
+This will insert:
+- Default Client (CLIENT001 + dynamic token)
+- Default Admin User (admin@gmail.com / admin123)
+
+```bash
+php artisan db:seed
+``` 
+
+## 8. Start Laravel Server
+```bash
+php artisan serve
+``` 
+-Default URL: http://127.0.0.1:8000
+
+## 9. Test Endpoints
+
+- Clients API: GET /api/clients
+- Users API: GET /api/users
+- Use Postman or React frontend to test
