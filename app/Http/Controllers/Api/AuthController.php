@@ -10,7 +10,11 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Actions\RegisterUser;
 use App\Actions\LoginUser;
 use App\DTOs\RegisterUserDTO;
-
+use Illuminate\Support\Str;
+use App\Models\RefreshToken;
+use App\Models\User;
+use App\Repositories\RefreshTokenRepository;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 
 class AuthController extends Controller
@@ -49,15 +53,42 @@ class AuthController extends Controller
         }
     }
 
-    public function refresh()
+    public function refresh(Request $request)
     {
        try {
-            $newToken = auth('api')->refresh();
+
+
+            $refreshToken = RefreshToken::where('token', $request->refresh_token)
+                ->where('expires_at', '>', now())
+                ->first();
+
+            if (!$refreshToken) {
+                  return ApiResponse::error('Invalid refresh token', null, 401);
+            }
+
+            $user = User::find($refreshToken->user_id);
+            $newAccessToken = JWTAuth::fromUser($user);
+
+            // rotate refresh token
+            // $refreshToken->delete();
+
+            $newRefreshToken = RefreshTokenRepository::create($user->id);
+
+
+            $tok =  $this->respondWithToken($newAccessToken, $newRefreshToken);
+            $res = [
+                "user" => $user,
+            ];
+
+            $response = array_merge($res,$tok);
+
+            return ApiResponse::success($response, 'Successfully', 200);
+
         } catch(\Exception $e) {
             return ApiResponse::error('Token refresh failed', null, 401);
         }
 
-        return ApiResponse::success($this->respondWithToken($newToken), 'New Token', 200);
+       
     }
 
     public function me()
@@ -72,20 +103,27 @@ class AuthController extends Controller
     }
 
      // LOGOUT
-    public function logout()
+    public function logout(Request $request)
     {
+
+        RefreshToken::where('token', $request->refresh_token)->delete();
         auth('api')->logout();
-        return response()->json(['message'=>'Successfully logged out']);
+        return ApiResponse::success(null, 'Successfully logged out', 200);
+
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token,$refresh_token)
     {
         return [
-            'access_token' => $token,
+            'token' => $token,
+            'refresh_token' => $refresh_token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60
         ];
      
     }
+
+    
+  
 
 }

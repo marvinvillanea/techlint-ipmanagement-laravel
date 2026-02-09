@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\DTOs\RegisterUserDTO;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\RefreshTokenRepository;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Validation\ValidationException;
@@ -24,9 +25,12 @@ class RegisterUser
 
         $token = JWTAuth::fromUser($user);
 
+        
+
         return [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'refresh_token' =>  RefreshTokenRepository::create($user->id)
         ];
     }
 }

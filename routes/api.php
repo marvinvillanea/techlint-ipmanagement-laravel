@@ -6,8 +6,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function(){
     
-    // Client registration
+    //CLIENT VERIFICATION CLIENT TOKEN PROVIDED BY OPERATOR
     Route::post('/client/register',[ClientController::class,'register']);
+
+
+    //RENEWAL REFRESH TOKEN FOR APPLICATION
+    Route::post('/auth/refresh',[AuthController::class,'refresh']);
 
     Route::middleware(['check.client.token'])->group(function(){
 
@@ -16,7 +20,6 @@ Route::prefix('v1')->group(function(){
 
         Route::middleware(['auth:api'])->group(function(){
             Route::post('/auth/me',[AuthController::class,'me']);
-            Route::post('/auth/refresh',[AuthController::class,'refresh']);
             Route::post('/auth/logout',[AuthController::class,'logout']);
         });
 

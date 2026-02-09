@@ -1,6 +1,7 @@
 <?php
 namespace App\Actions;
 
+use App\Repositories\RefreshTokenRepository;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Validation\ValidationException;
 
@@ -15,7 +16,8 @@ class LoginUser
 
         return [
             'user' => auth()->user(),
-            'token' => $token
+            'token' => $token,
+            'refresh_token' =>  RefreshTokenRepository::create(auth()->user()['id'])
         ];
     }
 }
