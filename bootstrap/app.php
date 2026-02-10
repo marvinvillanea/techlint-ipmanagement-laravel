@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->append([
             'api.logger' => \App\Http\Middleware\ApiRequestLogger::class,
+            'data.sanitize' =>  \App\Http\Middleware\DynamicSanitize::class,
             'db.transaction' => \App\Http\Middleware\DBTransactionMiddleware::class,
         ]);
     })

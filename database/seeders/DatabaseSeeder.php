@@ -36,6 +36,22 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Client::factory()->create();
+
+        DB::table('modules')->insert(
+            [
+                'name' => 'userManagement',
+                'table' => 'users',
+                'primary_id' => 'id',
+                'unique_field' => 'email',
+                'status' => 1,
+                'deleted' => 0,
+                'latest_edit_by' => 1,
+                'added_by' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
+
   
     }
 }

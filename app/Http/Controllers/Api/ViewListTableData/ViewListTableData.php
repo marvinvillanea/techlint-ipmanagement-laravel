@@ -38,12 +38,13 @@ class ViewListTableData extends Controller
                 foreach ($selectedColumns as $col) {
                     $q->orWhere($col, 'like', "%{$search}%");
                 }
-                    $q->where("id", '!=', "1");
 
             });
         }
 
-        $query->where('id', '!=', 1);
+        if($view_table=="v_usermanagement") {
+            $query->where('id', '!=', 1);
+        }
 
         $data = $query->paginate($page*10);
 
