@@ -69,10 +69,11 @@ class ProcessAPI
 
         SendToMicroserviceJob::dispatch(
             url: $_ENV["APP_URL_MICROSERVICES"].'/api/v1/process/'.$controller.'/'.$action,
-            payload: [
-                'user' => auth()->user()?->only(['id', 'name', 'email']),
-                'data' => $requestData,
-            ],
+            // payload: [
+            //     'user' => auth()->user()?->only(['id', 'name', 'email']),
+            //     'data' => $requestData,
+            // ],
+            payload:$requestData,
             headers: [
                 'X-Request-ID' => uniqid(),
                 'X-Service' => 'ERP',

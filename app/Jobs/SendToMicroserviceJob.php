@@ -66,7 +66,7 @@ class SendToMicroserviceJob implements ShouldQueue
 
             // QUEUE DISPATCH
 
-            $response = $client->post($this->url,  $data);
+            $response = $client->post($this->url, $data);
 
             $logData["response_body"] =$response->getBody()->getContents();
             $logData["status_code"] = $response->getStatusCode();
