@@ -32,8 +32,8 @@ Make sure you have installed:
 ## 2. Clone / Pull Project
 
 ```bash
-git clone <your-repo-url> erp-laravel-api
-cd erp-laravel-api
+git clone <your-repo-url> laravel-api-gateway
+cd laravel-api-gateway
 ```
 ---
 
@@ -51,10 +51,13 @@ cp .env.example .env
 Update .env with your database credentials:
 
 ```bash
+APP_URL=http://localhost
+APP_URL_MICROSERVICES=http://localhost:9090
+
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=erp_microservice
+DB_DATABASE=db_main
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -79,7 +82,7 @@ This will insert:
 - Default Admin User (admin@gmail.com / admin123)
 
 ```bash
-php artisan db:seed
+php artisan db:seed --class=DatabaseSeeder
 ``` 
 
 ## 8. Start Laravel Server
